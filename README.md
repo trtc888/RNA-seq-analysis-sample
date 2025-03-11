@@ -1,6 +1,8 @@
 # TCGA breast cancer RNA seq data analysis: an example procedure 
 Date: 2025-03-10
-
+## Purpuse
+This document is to show a sample procedure to analyze TCGA RNA-seq results.
+Metaplastic breast cancer is a rare and aggresive cancer type with poor prognosis. Understanding its gene expression pattern is helpful to deciper the behavior of this cancer type. This procedure intends to compare the transcriptomes of metaplastic breast cancer with the infiltrating duct carcinoma from surgical samples. Results can be further aligned with experimenental findings and modelings.
 ## Step 1: download RNA-seq results from TCGA
 1. goto TCGA [database](https://portal.gdc.cancer.gov/).
 2. Open Projects, and check breast in primary sites.
@@ -60,7 +62,9 @@ if __name__ == "__main__":
 
 ```
 ## Step 2: Organize data
-In this procedure, I am interested in the transcriptomic differences among metaplastic breast cancer, infiltrating ductal, and lobular breast cancer. Therefore, only these three types of samples will be selectd and organized for further analysis.
+In this procedure, I am interested in the transcriptomic differences between metaplastic breast cancer and infiltrating ductal breast cancer. Therefore, only these two types of samples will be selectd and organized for further analysis.
+Only surgical samples were analyzed to avoid potential interference of therapeutics.
+To save time, only 18 samples from each group were picked up for the analysis. Related codes can be removed for full analysis.
 ```r
 library("dplyr")
 library("stringr")
