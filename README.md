@@ -131,7 +131,7 @@ res_significant <- as.data.frame(subset(res[order(res$padj),], padj < 0.05))
 ```
 In the *results()* function, arg *contrast* is the way how the comparison should be analyzed. 
 
-# Step 4: Finalize the data comparison and save
+## Step 4: Finalize the data comparison and save
 In this step, package $biomaRt$ will be used to retrieve the gene names and descriptions. The tutorial of this pacckage is [here](https://bioconductor.org/packages/release/bioc/html/biomaRt.html).
 After gene info are retrieved, they can be merged with the result table. Below is an example. After that, genes expressions with adjusted p value less than 0.05 are extracted, annotated, sorted and saved for further analysis and plotting
 .
@@ -161,9 +161,4 @@ res_significant <- res_significant[order(res_significant$log2FoldChange),]
 
 write.csv(res_significant, "significant_results.csv")
 ```
-
-## Distribution and Citation
-This document and related codes can be freely distributed and reused. Cite the following reference if you want:
-
-Rui Tang, Aixiang Ding, Marvin Rivera, Eben Alsberg. Modeling breast cancer tissue in vitro using extracted native collagen fibers. [Cancer Res., 15 February 2021; 81 (4_Supplement): PS17–53.](https://doi.org/10.1158/1538-7445.SABCS20-PS17-53)
 
