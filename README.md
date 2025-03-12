@@ -5,6 +5,6 @@ In this quick guide, I will try to make a simple workflow for those who are not 
 My current plan is to write five short documents with given codes, including:
 ### 0. Configuration of computer
 ### 1. Data preprocessing of breast cancer RNA req raw results
-### 2. Quantitative comparison of metaplastic breast cancer and duct breast cancer transcriptomics from TCGA
+### [2. Quantitative comparison of metaplastic breast cancer and duct breast cancer transcriptomics from TCGA](./2_TCGA_Breast_Cancer/TCGA_Breast_Cancer.md)
 ### 3. Visualization of quantitative analysis
 ### 4. Gene ontology analysis and KEGG analysis
