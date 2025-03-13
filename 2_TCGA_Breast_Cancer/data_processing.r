@@ -6,7 +6,7 @@ library("jsonlite")
 
 #Function to extract case_id
 extract_file <- function(x) {
-  file_id <- x  %>% as.data.frame %>% select(case_id) %>% as.character
+  file_id <- x  %>% as.data.frame %>% dplyr::select(case_id) %>% as.character
   return(file_id)
 }
 
@@ -17,7 +17,7 @@ sample_info <- read.csv("./TCGA_info/clinical.cart.2025-03-10/clinical.tsv",sep=
 sample_select <- sample_info[sample_info$primary_diagnosis %in% c("Infiltrating duct carcinoma, NOS","Metaplastic carcinoma, NOS"),]
 
 ## Generate sample information for DESeqDataSetFromMatrix() function
-sample_groups <- sample_select %>% select(case_id,primary_diagnosis, treatment_type) %>% filter(treatment_type == "Surgery, NOS")
+sample_groups <- sample_select %>% dplyr::select(case_id,primary_diagnosis, treatment_type) %>% filter(treatment_type == "Surgery, NOS")
 
 ## Obtain data file names stored in the folder after Python combining
 #file_names <- list.files(path = "./TCGA_counts",full.names = TRUE)
@@ -28,7 +28,7 @@ json_data <- fromJSON("./TCGA_info/metadata.cart.2025-03-10.json")
 
 #Extract case_id from associated entities to entry
 json_data$case_id <- sapply(json_data$associated_entities, extract_file)
-json_data_use<- json_data %>% filter(endsWith(file_name, ".tsv")) %>% select(case_id,file_name)
+json_data_use<- json_data %>% filter(endsWith(file_name, ".tsv")) %>% dplyr::select(case_id,file_name)
 
 #Make colData for DESeqDataSetFromMatrix function
 sample_groups <-merge(sample_groups, json_data_use, by="case_id")
@@ -36,7 +36,7 @@ sample_groups <-merge(sample_groups, json_data_use, by="case_id")
 sample_groups_final <- sample_groups %>% 
   mutate(is_file_exist = ifelse(file_name %in% file_names, sample_groups$file_name, NA)) %>%
   filter(!is.na(is_file_exist)) %>%
-  select(-is_file_exist) %>%
+  dplyr::select(-is_file_exist) %>%
   group_by(file_name) %>%   #Remove duplicatte file names
   filter(row_number()==1) %>%
   group_by(primary_diagnosis) %>%      #Randomly select 18 samples from each diagnosis group
@@ -48,9 +48,11 @@ for (file in sample_groups_final$file_name) {
   full_path = paste("./TCGA_counts/", file, sep="")
   print(file)
   file_content <- read.csv(full_path, header=TRUE, skip = 1, sep="\t")
+  new_name <- sample_groups_final$case_id[sample_groups_final$file_name==file]
   merge_content <-file_content %>%
-    select(gene_id,unstranded) %>%
-    rename(unstranded = sample_groups_final$case_id[sample_groups_final$file_name==file])
+    dplyr::select(gene_id,unstranded) %>%
+    #    rename(unstranded = sample_groups_final$case_id[sample_groups_final$file_name==file])
+    rename_with(~new_name, "unstranded")
   if (is.null(merged_table)){
     merged_table <- merge_content
   }
@@ -68,8 +70,8 @@ merged_table <- merged_table[,c(2:ncol(merged_table))]
 library("DESeq2")
 
 dds1 <- DESeqDataSetFromMatrix(countData = merged_table,
-                              colData = sample_groups_final,
-                              design= ~ primary_diagnosis)
+                               colData = sample_groups_final,
+                               design= ~ primary_diagnosis)
 dds2 <- DESeq(dds1)
 res <- results(dds2, contrast = c("primary_diagnosis", "Metaplastic carcinoma, NOS", "Infiltrating duct carcinoma, NOS"))
 
@@ -87,8 +89,8 @@ values = str_split_i(row.names(res), "\\.", 1)
 lookup <- getBM(
   mart = mart,
   attributes = c('entrezgene_id', 'ensembl_gene_id',
-                 'gene_biotype','hgnc_symbol',  
-                 "definition_1006"), # Adding definition may result in multiplication of result rows
+                 'gene_biotype','hgnc_symbol'),  
+  #                "definition_1006"), # Adding definition may result in multiplication of result rows
   filter = 'ensembl_gene_id',
   values = values,
   uniqueRows = TRUE)
