@@ -102,3 +102,27 @@ res_significant <- merge(lookup, res_significant, by = "ensembl_gene_id", all.x 
 res_significant <- res_significant[order(res_significant$log2FoldChange),]
 
 write.csv(res_significant, "significant_results.csv")
+
+# Draw volcano plot
+library("EnhancedVolcano")
+res_merge <- as.data.frame(res)
+res_merge$ensembl_gene_id <- str_split_i(row.names(res_merge), "\\.", 1)
+res_merge <- merge(lookup, res_merge, by = "ensembl_gene_id", all.x = FALSE, all.y = TRUE)
+jpeg(filename = "volcano.jpg", width = 1500, height = 1000, pointsize = 20)
+EnhancedVolcano(res_merge,
+                lab = res_merge$hgnc_symbol,
+                x = 'log2FoldChange',
+                y = 'padj')
+dev.off()
+
+
+#Draw heatmap
+library("pheatmap")
+res_significant$ensembl_gene_id <-row.names(res_significant)
+merged_table$ensembl_gene_id <- row.names(merged_table)
+res_significant <- merge(res_significant, merged_table, by = "ensembl_gene_id", all.x = TRUE, all.y = FALSE)
+row.names(res_significant) <- res_significant$ensembl_gene_id
+res_heatmap <- res_significant[,c(8:ncol(res_significant))]
+jpeg(filename = "heatmap.jpg", width = 1500, height = 1000)
+pheatmap(res_heatmap, scale="row",color=colorRampPalette(c("blue","white","red"))(100))
+dev.off()

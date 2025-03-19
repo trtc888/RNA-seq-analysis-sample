@@ -6,5 +6,5 @@ My current plan is to write five short documents with given codes, including:
 ### 0. Configuration of computer
 ### [1. Data preprocessing of breast cancer RNA req raw results](./1_Preprocess/preprocess.md)
 ### [2. Quantitative comparison of metaplastic breast cancer and duct breast cancer transcriptomics from TCGA](./2_TCGA_Breast_Cancer/TCGA_Breast_Cancer.md)
-### 3. Visualization of quantitative analysis
+### [3. Visualization of quantitative analysis](./3_Visualization/Visualization.md)
 ### [4. Gene ontology analysis and KEGG analysis](./4_GO_KEGG_Reactome/4_GO_KEGG_Reactome.md)
