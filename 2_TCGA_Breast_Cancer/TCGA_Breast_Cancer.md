@@ -162,3 +162,9 @@ res_significant <- res_significant[order(res_significant$log2FoldChange),]
 write.csv(res_significant, "significant_results.csv")
 ```
 
+
+|A|B|C|
+|-|-|-|
+|1|2|3|
+|4|5|6|
+|7|8|9|

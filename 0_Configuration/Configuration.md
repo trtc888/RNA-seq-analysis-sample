@@ -125,7 +125,7 @@ $ sudo systemctl isolate graphical.target
 ```
 To set the command line as the default interface, use the command below:
 ```
-$ sudo sudo systemctl set-default multi-user.target
+$ sudo systemctl set-default multi-user.target
 ```
 
 
